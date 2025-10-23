@@ -1,0 +1,21 @@
+{
+  "timestamp": 1761235774883,
+  "operation": {
+    "id": "backend:tests:main"
+  },
+  "projectId": "eco5",
+  "files": [
+    {
+      "path": "/mnt/data/eco5/backend/server.test.ts",
+      "type": "text",
+      "size": 3809,
+      "dependencies": false
+    },
+    {
+      "path": "/mnt/data/eco5/backend/jest.config.ts",
+      "type": "text",
+      "size": 125,
+      "dependencies": false
+    }
+  ]
+}

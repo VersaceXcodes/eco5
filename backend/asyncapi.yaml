@@ -1,0 +1,250 @@
+asyncapi: 2.0.0
+info:
+  title: Eco5 Real-Time API
+  version: 1.0.0
+  description: This AsyncAPI specification details the real-time events for the
+    Eco5 web application, focusing on sustainability and eco-friendly practices.
+servers:
+  development:
+    url: http://localhost:3000
+    protocol: ws
+    description: The development server for real-time communication
+channels:
+  user/created:
+    subscribe:
+      summary: User Created Event
+      description: Event emitted when a new user is created.
+      operationId: userCreated
+      message:
+        $ref: "#/components/messages/UserCreated"
+  user/updated:
+    subscribe:
+      summary: User Updated Event
+      description: Event emitted when a user's information is updated.
+      operationId: userUpdated
+      message:
+        $ref: "#/components/messages/UserUpdated"
+  dashboard/updated:
+    subscribe:
+      summary: User Dashboard Updated Event
+      description: Event emitted when a user's dashboard is updated with new metrics
+        or progress.
+      operationId: dashboardUpdated
+      message:
+        $ref: "#/components/messages/DashboardUpdated"
+  impact/calculation/completed:
+    subscribe:
+      summary: Impact Calculation Completed Event
+      description: Event emitted when a user completes an impact calculation.
+      operationId: impactCalculationCompleted
+      message:
+        $ref: "#/components/messages/ImpactCalculationCompleted"
+  forum/thread/created:
+    subscribe:
+      summary: Forum Thread Created Event
+      description: Event emitted when a new thread is created in the community forum.
+      operationId: forumThreadCreated
+      message:
+        $ref: "#/components/messages/ForumThreadCreated"
+  event/created:
+    subscribe:
+      summary: Event Created Event
+      description: Event emitted when a new community event is created.
+      operationId: eventCreated
+      message:
+        $ref: "#/components/messages/EventCreated"
+  resource/added:
+    subscribe:
+      summary: Resource Added Event
+      description: Event emitted when a new resource is added to the library.
+      operationId: resourceAdded
+      message:
+        $ref: "#/components/messages/ResourceAdded"
+  alert/triggered:
+    subscribe:
+      summary: Alert Triggered Event
+      description: Event emitted when a user alert is triggered.
+      operationId: alertTriggered
+      message:
+        $ref: "#/components/messages/AlertTriggered"
+components:
+  messages:
+    UserCreated:
+      name: UserCreated
+      payload:
+        type: object
+        properties:
+          user:
+            $ref: "#/components/schemas/User"
+    UserUpdated:
+      name: UserUpdated
+      payload:
+        type: object
+        properties:
+          user:
+            $ref: "#/components/schemas/UpdateUserInput"
+    DashboardUpdated:
+      name: DashboardUpdated
+      payload:
+        type: object
+        properties:
+          user_dashboard:
+            $ref: "#/components/schemas/UpdateUserDashboardInput"
+    ImpactCalculationCompleted:
+      name: ImpactCalculationCompleted
+      payload:
+        type: object
+        properties:
+          impact_calculator:
+            $ref: "#/components/schemas/ImpactCalculator"
+    ForumThreadCreated:
+      name: ForumThreadCreated
+      payload:
+        type: object
+        properties:
+          forum_thread:
+            $ref: "#/components/schemas/EcoCommunityForum"
+    EventCreated:
+      name: EventCreated
+      payload:
+        type: object
+        properties:
+          event:
+            $ref: "#/components/schemas/Event"
+    ResourceAdded:
+      name: ResourceAdded
+      payload:
+        type: object
+        properties:
+          resource:
+            $ref: "#/components/schemas/ResourceLibrary"
+    AlertTriggered:
+      name: AlertTriggered
+      payload:
+        type: object
+        properties:
+          alert:
+            $ref: "#/components/schemas/Alert"
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        password_hash:
+          type: string
+    UpdateUserInput:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        password_hash:
+          type: string
+          nullable: true
+    UpdateUserDashboardInput:
+      type: object
+      properties:
+        user_id:
+          type: string
+        carbon_footprint:
+          type: number
+        historical_data:
+          type: string
+          nullable: true
+        daily_tips:
+          type: string
+          nullable: true
+        challenges:
+          type: string
+          nullable: true
+    ImpactCalculator:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        travel_habits:
+          type: string
+          nullable: true
+        energy_consumption:
+          type: string
+          nullable: true
+        waste_management:
+          type: string
+          nullable: true
+    EcoCommunityForum:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        thread_title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        event_name:
+          type: string
+        event_date:
+          type: string
+          format: date-time
+        location:
+          type: string
+          nullable: true
+        organizer_id:
+          type: string
+    ResourceLibrary:
+      type: object
+      properties:
+        id:
+          type: string
+        content_type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        content_url:
+          type: string
+          nullable: true
+        author_id:
+          type: string
+    Alert:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        alert_type:
+          type: string
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time

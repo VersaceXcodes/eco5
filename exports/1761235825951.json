@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761235825951,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "GV_Footer",
+      "version": "latest"
+    }
+  },
+  "projectId": "eco5",
+  "files": [
+    {
+      "path": "/mnt/data/eco5/vitereact/src/components/views/GV_Footer.tsx",
+      "type": "text",
+      "size": 3462,
+      "dependencies": false
+    }
+  ]
+}

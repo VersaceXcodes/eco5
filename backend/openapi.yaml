@@ -1,0 +1,747 @@
+openapi: 3.0.0
+info:
+  title: Eco5 API
+  description: API Spec for Eco5 web application
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user account
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /auth/login:
+    post:
+      summary: Login to obtain a JWT token
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password_hash:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth_token:
+                    type: string
+                  user_id:
+                    type: string
+  /users/{user_id}:
+    get:
+      summary: Get user details
+      operationId: getUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      summary: Update user details
+      operationId: updateUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /users/search:
+    get:
+      summary: Search users
+      operationId: searchUsers
+      parameters:
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            default: created_at
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            default: desc
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+  /dashboard/{user_id}:
+    get:
+      summary: Get user dashboard data
+      operationId: getUserDashboard
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDashboard"
+    patch:
+      summary: Update user dashboard data
+      operationId: updateUserDashboard
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDashboardInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDashboard"
+  /impact-calculator/{user_id}:
+    get:
+      summary: Get impact calculator data for a user
+      operationId: getImpactCalculator
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImpactCalculator"
+    patch:
+      summary: Update impact calculator data
+      operationId: updateImpactCalculator
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateImpactCalculatorInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImpactCalculator"
+  /community-forum:
+    get:
+      summary: Get community forum threads
+      operationId: getThreads
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EcoCommunityForum"
+    post:
+      summary: Post a new thread in the community forum
+      operationId: createThread
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEcoCommunityForumInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EcoCommunityForum"
+  /community-forum/{id}:
+    patch:
+      summary: Update a community forum thread
+      operationId: updateThread
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEcoCommunityForumInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EcoCommunityForum"
+  /events:
+    get:
+      summary: List all events
+      operationId: listEvents
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+    post:
+      summary: Create a new event
+      operationId: createEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+  /events/{id}:
+    patch:
+      summary: Update an event
+      operationId: updateEvent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+  /resource-library:
+    get:
+      summary: List all resources
+      operationId: listResources
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ResourceLibrary"
+    post:
+      summary: Add a new resource
+      operationId: createResource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateResourceLibraryInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResourceLibrary"
+  /resource-library/{id}:
+    patch:
+      summary: Update a resource
+      operationId: updateResource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateResourceLibraryInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResourceLibrary"
+  /alerts/{user_id}:
+    get:
+      summary: Get alerts for a user
+      operationId: getUserAlerts
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+    post:
+      summary: Create a new alert for a user
+      operationId: createAlert
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAlertInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+  /alerts/{id}:
+    patch:
+      summary: Update an alert
+      operationId: updateAlert
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAlertInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        password_hash:
+          type: string
+      required:
+        - id
+        - email
+        - name
+        - created_at
+        - password_hash
+    CreateUserInput:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password_hash:
+          type: string
+      required:
+        - email
+        - name
+        - password_hash
+    UpdateUserInput:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        password_hash:
+          type: string
+    UserDashboard:
+      type: object
+      properties:
+        user_id:
+          type: string
+        carbon_footprint:
+          type: number
+        historical_data:
+          type: string
+          nullable: true
+        daily_tips:
+          type: string
+          nullable: true
+        challenges:
+          type: string
+          nullable: true
+      required:
+        - user_id
+        - carbon_footprint
+    CreateUserDashboardInput:
+      type: object
+      properties:
+        user_id:
+          type: string
+        carbon_footprint:
+          type: number
+        historical_data:
+          type: string
+          nullable: true
+        daily_tips:
+          type: string
+          nullable: true
+        challenges:
+          type: string
+          nullable: true
+    UpdateUserDashboardInput:
+      type: object
+      properties:
+        user_id:
+          type: string
+        carbon_footprint:
+          type: number
+        historical_data:
+          type: string
+          nullable: true
+        daily_tips:
+          type: string
+          nullable: true
+        challenges:
+          type: string
+          nullable: true
+    ImpactCalculator:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        travel_habits:
+          type: string
+          nullable: true
+        energy_consumption:
+          type: string
+          nullable: true
+        waste_management:
+          type: string
+          nullable: true
+      required:
+        - id
+        - user_id
+    CreateImpactCalculatorInput:
+      type: object
+      properties:
+        user_id:
+          type: string
+        travel_habits:
+          type: string
+          nullable: true
+        energy_consumption:
+          type: string
+          nullable: true
+        waste_management:
+          type: string
+          nullable: true
+    UpdateImpactCalculatorInput:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        travel_habits:
+          type: string
+          nullable: true
+        energy_consumption:
+          type: string
+          nullable: true
+        waste_management:
+          type: string
+          nullable: true
+    EcoCommunityForum:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        thread_title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - thread_title
+        - content
+        - created_at
+    CreateEcoCommunityForumInput:
+      type: object
+      properties:
+        user_id:
+          type: string
+        thread_title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    UpdateEcoCommunityForumInput:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        thread_title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        event_name:
+          type: string
+        event_date:
+          type: string
+          format: date-time
+        location:
+          type: string
+          nullable: true
+        organizer_id:
+          type: string
+      required:
+        - id
+        - event_name
+        - event_date
+        - organizer_id
+    CreateEventInput:
+      type: object
+      properties:
+        event_name:
+          type: string
+        event_date:
+          type: string
+          format: date-time
+        location:
+          type: string
+          nullable: true
+        organizer_id:
+          type: string
+    UpdateEventInput:
+      type: object
+      properties:
+        id:
+          type: string
+        event_name:
+          type: string
+        event_date:
+          type: string
+          format: date-time
+        location:
+          type: string
+        organizer_id:
+          type: string
+    ResourceLibrary:
+      type: object
+      properties:
+        id:
+          type: string
+        content_type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        content_url:
+          type: string
+          nullable: true
+        author_id:
+          type: string
+      required:
+        - id
+        - content_type
+        - title
+        - author_id
+    CreateResourceLibraryInput:
+      type: object
+      properties:
+        content_type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        content_url:
+          type: string
+          nullable: true
+        author_id:
+          type: string
+    UpdateResourceLibraryInput:
+      type: object
+      properties:
+        id:
+          type: string
+        content_type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        content_url:
+          type: string
+          nullable: true
+        author_id:
+          type: string
+    Alert:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        alert_type:
+          type: string
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - alert_type
+        - message
+        - created_at
+    CreateAlertInput:
+      type: object
+      properties:
+        user_id:
+          type: string
+        alert_type:
+          type: string
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    UpdateAlertInput:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        alert_type:
+          type: string
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time

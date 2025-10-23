@@ -1,0 +1,19 @@
+{
+  "timestamp": 1761235818840,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_ResourceLibrary",
+      "version": "latest"
+    }
+  },
+  "projectId": "eco5",
+  "files": [
+    {
+      "path": "/mnt/data/eco5/vitereact/src/components/views/UV_ResourceLibrary.tsx",
+      "type": "text",
+      "size": 4771,
+      "dependencies": false
+    }
+  ]
+}
